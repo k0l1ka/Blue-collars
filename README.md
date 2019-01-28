@@ -1,4 +1,4 @@
-# multithreaded_progs
+# multithread_work
 
 The work of three workers is modeled using messsage queue during 1 minute:
 
