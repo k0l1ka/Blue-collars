@@ -1,25 +1,25 @@
-all: ev1 eg1 eg2 
+all: bolt nut1 nut2 clean
 
 realization.o: realization.cpp 
 	g++ -c realization.cpp 
 
-ev1: v1.o realization.o
-	 g++ -o ev1 v1.o realization.o
+bolt: bolt.o realization.o
+	 g++ -o bolt bolt.o realization.o
 
-v1.o: v1.cpp 
-	 g++ -c v1.cpp
+bolt.o: bolt.cpp 
+	 g++ -c bolt.cpp
 
-eg1: g1.o realization.o
-	g++ -o eg1 g1.o realization.o
+nut1: nut1.o realization.o
+	g++ -o nut1 nut1.o realization.o
 
-g1.o: g1.cpp 
-	g++ -c g1.cpp
+nut1.o: nut1.cpp 
+	g++ -c nut1.cpp
 
-eg2: g2.o realization.o
-	g++ -o eg2 g2.o realization.o
+nut2: nut2.o realization.o
+	g++ -o nut2 nut2.o realization.o
 
-g2.o: g2.cpp 
-	g++ -c g2.cpp
+nut2.o: nut2.cpp 
+	g++ -c nut2.cpp
 
 clean:
-	 rm v1.o ev1 g1.o eg1 g2.o eg2 realization.o
+	 rm *.o

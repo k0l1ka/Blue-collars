@@ -1,14 +1,14 @@
-# multithread_work
+The process of rocket assembly is modeled using message queue.
 
-The work of three workers is modeled using messsage queue during 1 minute:
+Workers construct rocket using bolts and nuts. One worker installs bolts and two others install nuts. All they act one by one. Each worker can install one detail at his turn. 
+Workers communicate using message queue. They assemble blocks consisting of 2 nuts and a bolt consistently and cannot begin new block while the last one was not finished.
 
-Three workers construct details with two female screws and a male screw. Each of them knows how to fix only one certain type of screws. The workshop is not big, so only a worker has access to the detail at each moment. 
+To run this code:
 
-To run this code :
-1) place all this files in one directory (in Linux)
-2)open realization.cpp and write your paths for logfiles for each worker (in my code - log0, log1 и log2) in the beginning of each constructor (there are 2 ones)
-3) Run makefile (type make in terminal) to get executables ev1, eg1 and eg2 for each worker 
-4) Run files ev1, eg1 and eg2 (that correspond to files v1.cpp, g1.cpp and g2.cpp) each in its own terminal with a command line int parameter (the duration of worker's action)
-5) All the info about actions is logged to files mentioned above by each "worker" (<- a process)
-6) In terminal processe also log the moment of ecexution of their actions
-7) The last worker writes in its terminal and its logfile the number of constructed details  
+-- execute makefile (type make in terminal) to get executables - nut1, nut2 and bolt - representing 3 workers 
+
+-- run executables nut1, nut2 and bolt each one in its own terminal with a command line parameter of type integer equal to the duration of one worker's action
+
+-- All the info about assembly process is logged in 3 files during "1 minute" of work 
+
+-- The last worker writes in its terminal and log-file the number of assembled blocks consisting of 2 nuts and a bolt

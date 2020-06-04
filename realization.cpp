@@ -35,9 +35,9 @@ void Vintovshik:: print_msg_1(Mess msg)
         log_file << "type: "<< msg.type<< endl;
 
 
-        log_file << "vintov: " << msg.vint << endl;
-        log_file << "gaek: " << msg.gayka << endl;
-        log_file << "detalei: " << msg.n << endl << endl;
+        log_file << "Number of bolts: " << msg.bolt << endl;
+        log_file << "Number of nuts: " << msg.nut << endl;
+        log_file << "Number of detailes: " << msg.n << endl << endl;
 
 /*	if (msgctl(mesid, IPC_STAT, buf) == 0)
         {
@@ -82,9 +82,9 @@ void Gaechnik:: print_msg_1(Mess msg)
         log_file << "type: "<< msg.type<< endl;
 
 
-        log_file << "vintov: " << msg.vint << endl;
-        log_file << "gaek: " << msg.gayka << endl;
-        log_file << "detalei: " << msg.n << endl << endl;
+        log_file << "Number of bolts: " << msg.bolt << endl;
+        log_file << "Number of nuts: " << msg.nut << endl;
+        log_file << "Number of detailes: " << msg.n << endl << endl;
 /*
         if (msgctl(mesid, IPC_STAT, buf) == 0)
         {
@@ -103,14 +103,14 @@ Vintovshik::~Vintovshik()
 //	log_file = freopen("/home/hz/Рабочий стол/rh/v_log", "w+", stdout);
 	wSend.type = wRead.type = 2L;
 
-	log_file << "vint: desctuctor" << endl;
+	log_file << "bolt: desctuctor" << endl;
 
         if (msgrcv(mesid,(void*)&wRead, sizeof(Workers), wRead.type,0) < 0)
 	{ 
-		log_file << "vint: Can't read message" << endl;
+		log_file << "bolt: Can't read message" << endl;
 		exit(1);
 	}	
-	log_file << "vint: mesage 2 readed" << endl;
+	log_file << "bolt: mesage 2 readed" << endl;
 
         print_msg_2(wRead);
         
@@ -118,34 +118,34 @@ Vintovshik::~Vintovshik()
 	{
         	wSend.num = wRead.num - 1;
 	        wSend.type = 2L;
-                log_file << "vint: Sends  m2" << endl;
+                log_file << "bolt: Sends  m2" << endl;
 
         	if (msgsnd(mesid,(void*)&wSend,sizeof(Workers),0) < 0)
         	{
-                	log_file<<"vint: Can't write message\n";
+                	log_file<<"bolt: Can't write message\n";
 			exit(1);
 		}
 		
-		log_file << "vint: Sended m2" << endl;	
+		log_file << "bolt: Sended message_2" << endl;	
 		print_msg_2(wSend);
 	}
         else
         {
 		if(msgctl(mesid,IPC_RMID,0)<0)
                 {
-                        log_file << "vint:  Can't delete queue\n";
+                        log_file << "bolt:  Can't delete queue\n";
                         exit(1);
                 }
 
 
-                log_file << "vint:  Queue was deleted" << endl;
+                log_file << "bolt:  Queue was deleted" << endl;
 
-                cout << "Sdelano detalei " << detalei << endl;
-                log_file << "Sdelano detalei " << detalei << endl;
+                cout << endl << detalei << " detailes made." << endl;
+                log_file << endl << detalei << " detailes made." << endl;
 	
 	}
 
-        log_file << "vint: desctuctor ended" << endl;
+        log_file << "bolt: desctuctor ended" << endl;
 
 	
         log_file.close();
@@ -170,16 +170,16 @@ Vintovshik::Vintovshik()
 ///	!!!	ЗДЕСЬ можно ВВЕСТИ ПУТЬ ДО ФАЙЛА С ИМЕНЕМ log0	!!!	///
 //	ofstream log_file("/home/hz/q/logs/log0");
 	
-	FILE *temp = fopen("/home/hz/q/logs/log0", "wb");
+	FILE *temp = fopen("log_bolt", "wb");
 	fclose(temp);
-        log_file.open ("/home/hz/q/logs/log0");
+        log_file.open ("log_bolt");
 
 
-	log_file<<"Конструктор Vintovshik: "<< endl; 
+	log_file<<"bolt constructor: "<< endl; 
 
 	if ((key = ftok("/tmp",'A'))<0)
 	{
-		log_file << "Vintovshik Can't get key\n";
+		log_file << "bolt worker cannot get key\n";
 		exit(1);
 	}
 
@@ -192,36 +192,36 @@ Vintovshik::Vintovshik()
 		
 		if(errno == EEXIST)
 		{
-			log_file <<"Vintovshik Очередь уже создана\n";
+			log_file <<"bolt: queue already created\n";
 
 			if ((mesid = msgget(key, PERM))< 0)
 			{
-				 log_file << " Vintovshik Can't create message's queue\n";            
+				 log_file << " bolt: cannot create message queue\n";            
 				 exit(1);
 			}
 		}
 		else
 		{
-			 log_file << "Vintovshik Can't create message's queue\n";
+			 log_file << "bolt: can't create message queue\n";
 			 exit(1);
 		}
 	}
 
-	log_file << "vintovshik mesid "<< mesid << endl;
+	log_file << "bolt: message id "<< mesid << endl;
 	
 		mSend.type = mRead.type = 1L;
 
-             	mSend.vint = 1;
-		mSend.gayka = 0;
+             	mSend.bolt = 1;
+		mSend.nut = 0;
 		detalei = mSend.n = 0;
 		
 					
 		if (msgsnd(mesid,(void*)&mSend,sizeof(Mess),0) < 0)
 		{
-			log_file << "vint:  Can't write message\n";
+			log_file << "bolt:  cannot write message\n";
 			exit(1);
 		}
-		log_file << "Vintovshik send mes 1 \n ";
+		log_file << "bolt: send message_1 \n ";
 		
 		print_msg_1(mSend);
 
@@ -234,10 +234,10 @@ Vintovshik::Vintovshik()
 
                 if (msgsnd(mesid,(void*)&wSend,sizeof(Workers),0) < 0)
                 {
-                        log_file << "vint:  Can't write message\n";
+                        log_file << "bolt:  cannot write message\n";
                         exit(1);
                 }
-                log_file << "Vintovshik send mes 2 \n ";
+                log_file << "bolt: send message_2 \n ";
 
                 print_msg_2(wSend);
 
@@ -257,16 +257,16 @@ Vintovshik::Vintovshik()
 void Vintovshik :: act (int tm) // time for sleep of process
 {
 //	 log_file = freopen("/home/hz/Рабочий стол/rh/v_log", "w+", stdout);
-	log_file<<"act vintovshik" << endl;
+	log_file<<"bolt: act" << endl;
 	mRead.type = mSend.type = 1L;
 
-	log_file << "vint reads m1" << endl;   
+	log_file << "bolt: read message_1" << endl;   
 	
 	int er = msgrcv(mesid,(void*)&mRead, sizeof(Mess), mRead.type, 0);
 	
 	if (er > 0)
 	{
-		log_file << "vint read m1"<< endl;
+		log_file << "bolt: read message_1"<< endl;
 		
 		print_msg_1(mRead);
 
@@ -274,30 +274,30 @@ void Vintovshik :: act (int tm) // time for sleep of process
 
 
 
-			if( (mRead.vint == 0) && (mRead.gayka == 2))
+			if( (mRead.bolt == 0) && (mRead.nut == 2))
 			{
 	        		mSend.type = 1L;			
-				mSend.vint = 0; 
-				mSend.gayka = 0;
+				mSend.bolt = 0; 
+				mSend.nut = 0;
 				detalei = mSend.n = mRead.n + 1;
 				      
 			}
 			else
 			{
 					mSend.type = 1L;
-					mSend.vint = 1;
-					mSend.gayka = mRead.gayka;
+					mSend.bolt = 1;
+					mSend.nut = mRead.nut;
 					detalei = mSend.n = mRead.n;
 			}
 
 
 		if(msgsnd(mesid, (void*)&mSend, sizeof(Mess), 0) < 0)
 		{
-			log_file << "vint:  Error : Can't write message\n";
+			log_file << "bolt: Error| cannot write message\n";
 			exit(1);	
 		}
 
-		log_file << "Vintovshik send m1\n";  
+		log_file << "bolt: send message_1\n";  
 		print_msg_1(mSend);
 	 
 
@@ -308,7 +308,7 @@ void Vintovshik :: act (int tm) // time for sleep of process
 
 	else
 	{
-		log_file << "vint:  Не могу читать\n"; 
+		log_file << "bolt: cannot read\n"; 
 		exit(1);
 	}
 
@@ -337,10 +337,10 @@ Gaechnik::Gaechnik(int n)
 
 //	       ofstream log_file("/home/hz/q/logs/log1");
 
-	        FILE *temp = fopen("/home/hz/q/logs/log1", "wb");
+	        FILE *temp = fopen("log_nut_1", "wb");
         	fclose(temp);
 
-	       log_file.open ("/home/hz/q/logs/log1");
+	       log_file.open ("log_nut_1");
 	}
 
 	if (id == 2)
@@ -350,17 +350,17 @@ Gaechnik::Gaechnik(int n)
 //	        ofstream log_file("/home/hz/q/logs/log2");
 
 
-	        FILE *temp = fopen("/home/hz/q/logs/log2", "wb");
+	        FILE *temp = fopen("log_nut_2", "wb");
         	fclose(temp);
 
-	        log_file.open ("/home/hz/q/logs/log2");
+	        log_file.open ("log_nut_2");
 	}
 
-        log_file<<"Конструктор Gaechnik "<< id << endl;
+        log_file<<"nut: constructor "<< id << endl;
 
         if ((key = ftok("/tmp",'A'))<0)
         {
-                log_file <<"gayka"<< id<<" : Can't get key\n";
+                log_file <<"nut"<< id<<" : cannot get key\n";
                 exit(1);
         }
 
@@ -372,17 +372,17 @@ Gaechnik::Gaechnik(int n)
 
                 if(errno == EEXIST)
                 {
-                        log_file << "gayka "<< id << ": Очередь уже создана" << endl;
+                        log_file << "nut "<< id << ": queue already created" << endl;
 
                         if ((mesid = msgget(key,PERM))< 0)
                         {
-                                log_file << "gayka"<< id <<": Can't create message's queue" << endl;
+                                log_file << "nut"<< id <<": cannot create message queue" << endl;
                                 exit(1);
                         }			
                 }
                 else
                 {
-                        log_file << "gayka"<< id <<": Can't create message's queue" << endl;
+                        log_file << "nut"<< id <<": cannot create message queue" << endl;
                         exit(1);
                 }
         }
@@ -391,17 +391,17 @@ Gaechnik::Gaechnik(int n)
         	mSend.type = mRead.type = 1L;
 
 
-	        log_file << "gayka mesid "<< mesid << endl;
+	        log_file << "nut: message id "<< mesid << endl;
 
 
 
-        	log_file << "constuctor:  gaechnik" << id <<" reads m1" << endl;
+        	log_file << "constuctor:  nut" << id <<" reads message_1" << endl;
         	if (msgrcv(mesid,(void*)&mRead,sizeof(Mess), mRead.type, 0) < 0)
         	{
-                	log_file << "gayka"<< id <<": Can't read message\n";
+                	log_file << "nut"<< id <<": cannot read message\n";
                 	exit(1);
         	}
-		log_file << "gayka"<< id <<": Readed m1" << endl;
+		log_file << "nut"<< id <<": read message_1" << endl;
 
 		print_msg_1(mRead);
 
@@ -411,13 +411,13 @@ Gaechnik::Gaechnik(int n)
 
 		wSend.type = wRead.type = 2L;
 
-                log_file << "constuctor:  gaechnik" << id <<" reads m2" << endl;
+                log_file << "constuctor:  nut" << id <<" read message_2" << endl;
                 if (msgrcv(mesid,(void*)&wRead,sizeof(Workers), wRead.type, 0) < 0)
                 {
-                        log_file << "gayka"<< id <<": Can't read message\n";
+                        log_file << "nut"<< id <<": cannot read message\n";
                         exit(1);
                 }
-                log_file << "gayka"<< id <<": Readed m2" << endl;
+                log_file << "nut"<< id <<": read message_2" << endl;
 
                 print_msg_2(wRead);
 
@@ -426,28 +426,28 @@ Gaechnik::Gaechnik(int n)
 
         	mSend.type = 1L;
 		
-		if (mRead.vint == 1 && mRead.gayka == 1)
+		if (mRead.bolt == 1 && mRead.nut == 1)
 		{
-			mSend.vint = 0;
-			mSend.gayka = 0;
+			mSend.bolt = 0;
+			mSend.nut = 0;
 			detalei = mSend.n = mRead.n + 1;
 		}
 		else
 		{
-			if (mRead.gayka < 2)
+			if (mRead.nut < 2)
 			{
-				mSend.vint = mRead.vint;
-        	    		mSend.gayka = mRead.gayka + 1;
+				mSend.bolt = mRead.bolt;
+        	    		mSend.nut = mRead.nut + 1;
 				detalei = mSend.n = mRead.n;
 			}
 		}
 
 		if(msgsnd(mesid, (void*)&mSend, sizeof(Mess), 0) < 0)
 		{
-			log_file << "gayka"<< id <<": Can't write message" << endl;
+			log_file << "nut"<< id <<": cannot write message" << endl;
 			exit(1);
 		}
-		log_file << "gayka " << id <<": Sended m1" << endl;
+		log_file << "nut " << id <<": sent message_1" << endl;
 		
                 print_msg_1(mSend);
 
@@ -457,10 +457,10 @@ Gaechnik::Gaechnik(int n)
 		wSend.type = 2L;
 		if (msgsnd(mesid, (void*)&wSend, sizeof(Workers), 0) < 0)
                 {
-                        log_file << "gayka"<< id <<": Can't write message" << endl;
+                        log_file << "nut"<< id <<": cannot write message" << endl;
                         exit(1);
                 }
-                log_file << "gayka " << id <<": Sended m2" << endl;
+                log_file << "nut " << id <<": sent message_2" << endl;
 
                 print_msg_2(wSend);
 
@@ -481,14 +481,14 @@ Gaechnik::~Gaechnik()
 {
 	wSend.type = wRead.type = 2L;
 
-	log_file << "gaechnik: desctuctor" << endl;
+	log_file << "nut: desctuctor" << endl;
 
         if (msgrcv(mesid,(void*)&wRead, sizeof(Workers), wRead.type,0) < 0)
         {
-                log_file << "gaechnik: Can't read message" << endl;
+                log_file << "nut: cannot read message" << endl;
                 exit(1);
         }
-        log_file << "gaechnik: mesage 2 readed" << endl;
+        log_file << "nut: read message_2" << endl;
 
         print_msg_2(wRead);
 
@@ -500,29 +500,29 @@ Gaechnik::~Gaechnik()
                 wSend.type = 2L;
                 if (msgsnd(mesid,(void*)&wSend,sizeof(Workers),0) < 0)
                 {
-                        log_file<<"gaechnik: Can't write message\n";
+                        log_file<<"nut: cannot write message\n";
                         exit(1);
                 }
-                log_file << "gaechnik: Sended m2" << endl;
+                log_file << "nut: sent message_2" << endl;
                 print_msg_2(wSend);
         }
         else
         {
                 if(msgctl(mesid,IPC_RMID,0)<0)
                 {
-                        log_file << "gaechnik:  Can't delete queue\n";
+                        log_file << "nut: cannot delete queue\n";
                         exit(1);
                 }
 
 		
-                log_file << "gaechnik:  Queue was deleted" << endl;
+                log_file << "nut:  queue was deleted" << endl;
         	
-		cout << "Sdelano detalei " << detalei << endl;
-                log_file << "Sdelano detalei " << detalei << endl;
+				cout << endl << detalei << " detailes made." << endl;
+                log_file << endl << detalei << " detailes made." << endl;
 
 	}
 
-        log_file << "gaechnik: desctuctor ended" << endl;
+        log_file << "nut: end of desctuctor" << endl;
 
 
         log_file.close();
@@ -548,30 +548,30 @@ void Gaechnik::act(int tm)
 	
 	mRead.type = mSend.type = 1L;
 
-        log_file << "act: gaechnik "<< id << " reads m1" << endl;
+        log_file << "nut: "<< id << " read message_1" << endl;
 
        	if (msgrcv(mesid,(void*)&mRead, sizeof(Mess), mRead.type, 0) < 0)
 	{
-		log_file << "gayka "<< id  <<": Can't read message" << endl;
+		log_file << "nut "<< id  <<": cannot read message" << endl;
 		exit(1);
 	}
 
-	log_file << "gayka" << id <<": Readed m1" << endl;
+	log_file << "nut" << id <<": read message_1" << endl;
 
 	print_msg_1(mRead);
 
-                if (mRead.vint == 1 && mRead.gayka == 1)
+                if (mRead.bolt == 1 && mRead.nut == 1)
                 {
-                        mSend.vint = 0;
-                        mSend.gayka = 0;
+                        mSend.bolt = 0;
+                        mSend.nut = 0;
                         detalei = mSend.n = mRead.n + 1;
                 }
                 else
                 {
-                        if (mRead.gayka < 2)
+                        if (mRead.nut < 2)
                         {
-                                mSend.vint = mRead.vint;
-                                mSend.gayka = mRead.gayka + 1;
+                                mSend.bolt = mRead.bolt;
+                                mSend.nut = mRead.nut + 1;
                                 detalei = mSend.n = mRead.n;
                         }
                 }
@@ -580,10 +580,10 @@ void Gaechnik::act(int tm)
 
                 if (msgsnd(mesid, (void*)&mSend, sizeof(Mess), 0) < 0)
                 {
-                        log_file << "gayka"<< id <<": Can't write message" << endl;
+                        log_file << "nut "<< id <<": cannot write message" << endl;
                         exit(1);
                 }
-                log_file << "gayka " << id <<": Sended m1" << endl;
+                log_file << "nut " << id <<": sent message_1" << endl;
 
                 print_msg_1(mSend);
 	

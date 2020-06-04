@@ -3,16 +3,13 @@
 #include <sys/ipc.h>
 #include <stdlib.h>
 #include <sys/msg.h>
-#include <time.h>
 #include <errno.h>
 #include <string.h>
+#include <time.h>
 
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-
-#include <time.h>
-
 
 #define PERM 0666
 using namespace std;
@@ -21,8 +18,8 @@ using namespace std;
 struct Mess{   //type 1L
 	long type;
 	//int pid;
-	int vint; 
-	int gayka;
+	int bolt; 
+	int nut;
 	int n;
 };
 
@@ -36,7 +33,7 @@ class Vintovshik{
 	Mess mRead, mSend; // сообщения для посылки и чтения
 	Workers wRead, wSend;
 	key_t key;         // ключ для создания очереди сообщений
-	int mesid;        // идентификатор очерреди сообщений
+	int mesid;        // идентификатор очереди сообщений
 	int id;
 	struct msqid_ds *buf;
 	ofstream log_file;

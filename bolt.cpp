@@ -11,23 +11,23 @@ int main(int argc, char **argv)
 	Vintovshik v;		
 	 
 
-	cout<<"v started  " << started << endl;
+	cout<<"bolt worker 1 started at moment " << started << endl;
 
         now = started + 1;
 
-        cout<< "now   "<< now<<endl;
+        cout<< "start at "<< now<<endl;
 
-	cout << "begin while" << endl;	
+	// cout << "begin while" << endl;	
 
         while ( now - started < 60)
         {
 //     	        cout << "acting"<<endl;
 		v.act(t);
                 now = time(NULL);
-		cout<< "now   "<< now<<endl;
+		cout<< "time is "<< now<<endl;
         }
 
-        cout<<"end while " << endl;
+        // cout<<"end while " << endl;
 
 
 	return 0;

@@ -9,23 +9,23 @@ int main(int argc, char **argv)
 
 	Gaechnik g1(1);	
 
-        cout<<"g1 started  " << started << endl;
+        cout<<"nut worker 1 started at moment " << started << endl;
 
         now = started + 1;
 
-        cout<< "now   "<< now<<endl;
+        cout<< "now is "<< now<<endl;
 
-        cout<<"begin while " << endl;
+        // cout<<"begin while " << endl;
 
         while ( now - started < 60)
         {
 //		cout<< "acting"<<endl;
                 g1.act(t);
                 now = time(NULL);
-                cout<< "now   "<< now<<endl;
+                cout<< "now is "<< now<<endl;
         }
 
-        cout<<"end while " << endl;
+        // cout<<"end while " << endl;
 
 	return 0;
 }
